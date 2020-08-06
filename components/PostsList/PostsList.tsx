@@ -27,6 +27,8 @@ const PostsList: React.FC<PostsListProps> = ({ posts, setPosts }) => {
     callAPI();
   }, []);
 
+  if (!posts.length) return <h1>Loading...</h1>;
+
   const postItems = posts.map((post) => <PostItem key={post.id} post={post} />);
 
   return (

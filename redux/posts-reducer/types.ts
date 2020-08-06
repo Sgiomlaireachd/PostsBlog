@@ -18,7 +18,7 @@ export type SetNewCommentActionType = {
   type: typeof SET_NEW_COMMENT;
   payload: {
     postId: number;
-    comment: CommentType | undefined;
+    comment: CommentType;
   };
 };
 

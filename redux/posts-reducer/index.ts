@@ -34,9 +34,10 @@ export const postsReducer = (
     case SET_NEW_COMMENT:
       return {
         ...state,
+        // @ts-ignore: Unreachable code error
         currentPost: {
           ...state.currentPost,
-          comments: [...state.currentPost?.comments, action.payload.comment],
+          comments: state.currentPost?.comments?.concat(action.payload.comment),
         },
       };
     default:
@@ -58,7 +59,7 @@ export const setCurrentPost = (post: PostType): SetCurrentPostActionType => ({
 
 export const setNewComment = (
   postId: number,
-  comment: CommentType | undefined
+  comment: CommentType
 ): SetNewCommentActionType => ({
   type: SET_NEW_COMMENT,
   payload: {
