@@ -1,31 +1,27 @@
-import { CommentType } from "../../interfaces";
+import { PostType } from "../../interfaces";
 import CommentsForm from "./CommentsForm";
 import { connect } from "react-redux";
 import { StateType } from "../../redux/store";
 
-type PostCommentsProps = {
-  comments: CommentType[];
-  commentFormSubmitHandler: (formObject: any) => void;
+type MapStateProps = {
+  currentPost?: PostType | null;
 };
 
-const PostComments: React.FC<PostCommentsProps> = ({
-  comments,
-  commentFormSubmitHandler,
-}) => {
-  const commentItems = comments?.map((comment) => (
-    <h5 key={comment.id}>{comment.body}</h5>
-  ));
+const PostComments: React.FC<MapStateProps> = ({ currentPost }) => {
+  const commentItems = currentPost?.comments?.map((comment) => {
+    return <h5 key={comment.id}>{comment.body}</h5>;
+  });
 
   return (
     <>
       <h1>Post comments:</h1>
       {commentItems}
-      <CommentsForm commentFormSubmitHandler={commentFormSubmitHandler} />
+      <CommentsForm />
     </>
   );
 };
 
-const mapStateToProps = (state: StateType) => ({
+const mapStateToProps = (state: StateType): MapStateProps => ({
   currentPost: state.posts.currentPost,
 });
 

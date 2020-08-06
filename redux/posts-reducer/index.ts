@@ -1,10 +1,12 @@
-import { PostType } from "../../interfaces";
+import { PostType, CommentType } from "../../interfaces";
 import {
   SET_POSTS,
   PostsActionsTypes,
   SetPostsActionType,
   SetCurrentPostActionType,
   SET_CURRENT_POST,
+  SET_NEW_COMMENT,
+  SetNewCommentActionType,
 } from "./types";
 
 const initialState = {
@@ -29,6 +31,14 @@ export const postsReducer = (
         ...state,
         currentPost: action.payload,
       };
+    case SET_NEW_COMMENT:
+      return {
+        ...state,
+        currentPost: {
+          ...state.currentPost,
+          comments: [...state.currentPost?.comments, action.payload.comment],
+        },
+      };
     default:
       return state;
   }
@@ -44,4 +54,15 @@ export const setPosts = (posts: PostType[]): SetPostsActionType => ({
 export const setCurrentPost = (post: PostType): SetCurrentPostActionType => ({
   type: SET_CURRENT_POST,
   payload: post,
+});
+
+export const setNewComment = (
+  postId: number,
+  comment: CommentType | undefined
+): SetNewCommentActionType => ({
+  type: SET_NEW_COMMENT,
+  payload: {
+    postId,
+    comment,
+  },
 });

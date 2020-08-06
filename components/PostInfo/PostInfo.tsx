@@ -1,30 +1,52 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { PostType } from "../../interfaces";
 import PostComments from "./PostComments";
 import { API } from "../../api";
+import { connect } from "react-redux";
+import { StateType } from "../../redux/store";
+import { setCurrentPost } from "../../redux/posts-reducer";
 
-type PostInfoProps = {
-  post: PostType;
+type OwnProps = {
+  postId: number;
 };
 
-const PostInfo: React.FC<PostInfoProps> = ({ post }) => {
-  const [comments, setComments] = useState(post.comments);
+type MapStateProps = {
+  currentPost: PostType | null;
+};
 
-  const commentFormSubmitHandler = async (formObject: any) => {
-    const comment = await API.addComment(post.id, formObject.newComment);
-    setComments([...comments, comment]);
-  };
+type MapDispatchProps = {
+  setCurrentPost: (post: PostType) => void;
+};
+
+type PostInfoProps = OwnProps & MapStateProps & MapDispatchProps;
+
+const PostInfo: React.FC<PostInfoProps> = ({
+  currentPost,
+  setCurrentPost,
+  postId,
+}) => {
+  useEffect(() => {
+    const callAPI = async () => {
+      const post = await API.getPostInfo(postId);
+      setCurrentPost(post);
+    };
+
+    callAPI();
+  }, []);
+
+  if (!currentPost) return <h1>Loading...</h1>;
 
   return (
     <>
-      <h1>Post: {post.title}</h1>
-      <p>{post.body}</p>
-      <PostComments
-        comments={comments}
-        commentFormSubmitHandler={commentFormSubmitHandler}
-      />
+      <h1>Post: {currentPost.title}</h1>
+      <p>{currentPost.body}</p>
+      <PostComments />
     </>
   );
 };
 
-export default PostInfo;
+const mapStateToProps = (state: StateType) => ({
+  currentPost: state.posts.currentPost,
+});
+
+export default connect(mapStateToProps, { setCurrentPost })(PostInfo);

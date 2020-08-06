@@ -1,13 +1,17 @@
 import { Form, Field } from "react-final-form";
 import { useState } from "react";
+import { connect } from "react-redux";
+import { setNewComment } from "../../redux/posts-reducer";
+import { CommentType } from "../../interfaces";
+import { useRouter } from "next/router";
+import { API } from "../../api";
 
-type CommentsFormProps = {
-  commentFormSubmitHandler: (formObject: any) => void;
+type MapDispatchProps = {
+  setNewComment: (postId: number, comment: CommentType) => void;
 };
 
-const CommentsForm: React.FC<CommentsFormProps> = ({
-  commentFormSubmitHandler,
-}) => {
+const CommentsForm: React.FC<MapDispatchProps> = ({ setNewComment }) => {
+  const router = useRouter();
   const [newCommentText, setNewCommentText] = useState("");
 
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,9 +22,11 @@ const CommentsForm: React.FC<CommentsFormProps> = ({
     newComment: string;
   };
 
-  const formSubmitHandler = (formObject: FormFieldsTypes) => {
+  const formSubmitHandler = async ({ newComment }: FormFieldsTypes) => {
+    const postId = Number(router.query.postId);
+    const res = await API.addComment(postId, newComment);
+    setNewComment(postId, res);
     setNewCommentText("");
-    commentFormSubmitHandler(formObject);
   };
 
   return (
@@ -41,4 +47,4 @@ const CommentsForm: React.FC<CommentsFormProps> = ({
   );
 };
 
-export default CommentsForm;
+export default connect(null, { setNewComment })(CommentsForm);
