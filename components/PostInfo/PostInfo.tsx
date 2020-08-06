@@ -8,7 +8,6 @@ import { setCurrentPost } from "../../redux/posts-reducer";
 
 type OwnProps = {
   postId: number;
-  preloadedPost: PostType;
 };
 
 type MapStateProps = {
@@ -25,7 +24,6 @@ const PostInfo: React.FC<PostInfoProps> = ({
   currentPost,
   setCurrentPost,
   postId,
-  preloadedPost,
 }) => {
   useEffect(() => {
     const callAPI = async () => {
@@ -36,16 +34,12 @@ const PostInfo: React.FC<PostInfoProps> = ({
     callAPI();
   }, []);
 
-  let post: PostType | null;
-  if (!currentPost && preloadedPost) post = preloadedPost;
-  else post = currentPost;
-
-  if (!post) return <h1>Loading...</h1>;
+  if (!currentPost) return <h1>Loading...</h1>;
 
   return (
     <>
-      <h1>Post: {post.title}</h1>
-      <p>{post.body}</p>
+      <h1>Post: {currentPost.title}</h1>
+      <p>{currentPost.body}</p>
       <PostComments />
     </>
   );
