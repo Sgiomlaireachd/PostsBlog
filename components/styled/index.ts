@@ -76,3 +76,12 @@ export const ErrorSpan = styled.span`
 export const FormLabel = styled.label`
   margin-right: 10px;
 `;
+
+export const LoadingMessage = styled.h1`
+  color: ${colors.darkRed};
+  font-size: 35px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d()(-50%, -50%, 0);
+`

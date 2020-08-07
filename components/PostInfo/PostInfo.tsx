@@ -7,7 +7,7 @@ import { StateType } from "../../redux/store";
 import { setCurrentPost } from "../../redux/posts-reducer";
 import styled from "styled-components";
 import themes from "../../themes";
-import { Container, PostHeader, PostBody } from "../styled";
+import { Container, PostHeader, PostBody, LoadingMessage } from "../styled";
 const { colors } = themes;
 
 type OwnProps = {
@@ -44,7 +44,7 @@ const PostInfo: React.FC<PostInfoProps> = ({
     callAPI();
   }, []);
 
-  if (!currentPost) return <h1>Loading...</h1>;
+  if (!currentPost) return <LoadingMessage>Loading...</LoadingMessage>;
 
   return (
     <Container paddingTop paddingBottom>
