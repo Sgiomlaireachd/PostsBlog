@@ -2,6 +2,7 @@ import { PostType } from "../../interfaces";
 import PostItem from "./PostItem";
 import { Container } from "../styled";
 import styled from "styled-components";
+import fp from "lodash/fp";
 
 type PostsListProps = {
   preloadedPosts: PostType[];
@@ -14,9 +15,9 @@ const PostsHeader = styled.h1`
 `;
 
 const PostsList: React.FC<PostsListProps> = ({ preloadedPosts }) => {
-  let postItems = preloadedPosts.map((post) => (
+  const postItems = fp.map((post: PostType) => (
     <PostItem key={post.id} post={post} />
-  ));
+  ))(preloadedPosts);
 
   return (
     <Container paddingTop paddingBottom>

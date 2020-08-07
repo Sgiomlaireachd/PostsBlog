@@ -1,9 +1,10 @@
-import { PostType } from "../../interfaces";
+import { PostType, CommentType } from "../../interfaces";
 import CommentsForm from "./CommentsForm";
 import { connect } from "react-redux";
 import { StateType } from "../../redux/store";
 import styled from "styled-components";
 import themes from "../../themes";
+import fp from "lodash/fp";
 const { colors } = themes;
 
 type MapStateProps = {
@@ -22,14 +23,12 @@ const CommentItem = styled.p`
 `;
 
 const PostComments: React.FC<MapStateProps> = ({ currentPost }) => {
-  const commentItems = currentPost?.comments?.map((comment) => {
-    return (
-      <div key={comment.id}>
-        <CommentItem>{comment.body || "NO_COMMENT_BODY"}</CommentItem>
-        <hr />
-      </div>
-    );
-  });
+  const commentItems = fp.map((comment: CommentType) => (
+    <div key={comment.id}>
+      <CommentItem>{comment.body || "NO_COMMENT_BODY"}</CommentItem>
+      <hr />
+    </div>
+  ))(currentPost?.comments);
 
   return (
     <>
