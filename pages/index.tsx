@@ -1,21 +1,21 @@
-import { API } from "../api";
 import PostsListContainer from "../components/PostsList/PostsList";
-import { PostType } from "../interfaces";
 import { NextPage } from "next";
+import { API } from "../api";
+import { PostType } from "../interfaces";
 
-type IndexPagePropsType = {
-  posts: PostType[];
+type IndexPageProps = {
+  preloadedPosts: PostType[];
 };
 
-const IndexPage: NextPage<IndexPagePropsType> = ({ posts }) => (
-  <PostsListContainer posts={posts} />
+const IndexPage: NextPage<IndexPageProps> = ({ preloadedPosts }) => (
+  <PostsListContainer preloadedPosts={preloadedPosts} />
 );
 
 export async function getServerSideProps() {
   const res = await API.getAllPosts();
   return {
     props: {
-      posts: res,
+      preloadedPosts: res,
     },
   };
 }

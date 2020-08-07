@@ -1,14 +1,12 @@
 import { NextPage, NextPageContext } from "next";
-import { PostType } from "../../interfaces";
 import PostInfo from "../../components/PostInfo/PostInfo";
-import { API } from "../../api";
 
 type PostPageProps = {
-  post: PostType;
+  postId: number;
 };
 
-const PostPage: NextPage<PostPageProps> = ({ post }) => {
-  return <PostInfo post={post} />;
+const PostPage: NextPage<PostPageProps> = (props) => {
+  return <PostInfo {...props} />;
 };
 
 type PostPageContext = NextPageContext & {
@@ -19,11 +17,9 @@ type PostPageContext = NextPageContext & {
 
 export async function getServerSideProps({ query }: PostPageContext) {
   const postId = query.postId;
-  const post = await API.getPostInfo(postId);
-
   return {
     props: {
-      post,
+      postId,
     },
   };
 }

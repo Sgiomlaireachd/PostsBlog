@@ -1,30 +1,70 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { PostType } from "../../interfaces";
 import PostComments from "./PostComments";
 import { API } from "../../api";
+import { connect } from "react-redux";
+import { StateType } from "../../redux/store";
+import { setCurrentPost } from "../../redux/posts-reducer";
+import styled from "styled-components";
+import themes from "../../themes";
+import { Container, PostHeader, PostBody } from "../styled";
+const { colors } = themes;
 
-type PostInfoProps = {
-  post: PostType;
+type OwnProps = {
+  postId: number;
 };
 
-const PostInfo: React.FC<PostInfoProps> = ({ post }) => {
-  const [comments, setComments] = useState(post.comments);
+type MapStateProps = {
+  currentPost: PostType | null;
+};
 
-  const commentFormSubmitHandler = async (formObject: any) => {
-    const comment = await API.addComment(post.id, formObject.newComment);
-    setComments([...comments, comment]);
-  };
+type MapDispatchProps = {
+  setCurrentPost: (post: PostType) => void;
+};
+
+type PostInfoProps = OwnProps & MapStateProps & MapDispatchProps;
+
+const PostCard = styled.div`
+  padding: 30px;
+  margin: 0 auto;
+  border: 1px solid ${colors.grey};
+`;
+
+const PostInfo: React.FC<PostInfoProps> = ({
+  currentPost,
+  setCurrentPost,
+  postId,
+}) => {
+  useEffect(() => {
+    const callAPI = async () => {
+      const post = await API.getPostInfo(postId);
+      setCurrentPost(post);
+    };
+
+    callAPI();
+  }, []);
+
+  if (!currentPost) return <h1>Loading...</h1>;
 
   return (
-    <>
-      <h1>Post: {post.title}</h1>
-      <p>{post.body}</p>
-      <PostComments
-        comments={comments}
-        commentFormSubmitHandler={commentFormSubmitHandler}
-      />
-    </>
+    <Container paddingTop paddingBottom>
+      <PostCard>
+        <h1>Title</h1>
+        <PostHeader marginTop> {currentPost.title}</PostHeader>
+        <hr />
+        <br />
+        <h1>Body</h1>
+        <PostBody>{currentPost.body}</PostBody>
+        <hr />
+        <br />
+        <PostComments />
+      </PostCard>
+    </Container>
   );
 };
 
-export default PostInfo;
+const mapStateToProps = (state: StateType) => ({
+  currentPost: state.posts.currentPost,
+});
+
+export default connect(mapStateToProps, { setCurrentPost })(PostInfo);
