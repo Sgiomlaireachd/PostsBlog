@@ -5,10 +5,13 @@ import { setNewComment } from "../../redux/posts-reducer";
 import { CommentType } from "../../interfaces";
 import { useRouter } from "next/router";
 import { API } from "../../api";
+import { StyledForm, Button, ErrorSpan } from "../styled";
 
 type MapDispatchProps = {
   setNewComment: (postId: number, comment: CommentType) => void;
 };
+
+const required = (value: any) => (value ? undefined : "Comment can't be empty");
 
 const CommentsForm: React.FC<MapDispatchProps> = ({ setNewComment }) => {
   const router = useRouter();
@@ -33,15 +36,28 @@ const CommentsForm: React.FC<MapDispatchProps> = ({ setNewComment }) => {
     <Form
       onSubmit={formSubmitHandler}
       render={({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
+        <StyledForm onSubmit={handleSubmit}>
           <Field
             name="newComment"
-            onChange={inputChangeHandler}
-            component="input"
-            placeholder="Leave comment"
+            validate={required}
             defaultValue={newCommentText}
-          />
-        </form>
+          >
+            {({ input, meta }) => (
+              <div>
+                <input
+                  {...input}
+                  type="text"
+                  placeholder="Leave Comment"
+                  onChange={inputChangeHandler}
+                />
+                <Button type="submit">Add Comment</Button>
+                {meta.error && meta.touched && (
+                  <ErrorSpan>{meta.error}</ErrorSpan>
+                )}
+              </div>
+            )}
+          </Field>
+        </StyledForm>
       )}
     ></Form>
   );

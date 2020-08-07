@@ -5,6 +5,10 @@ import { API } from "../../api";
 import { connect } from "react-redux";
 import { StateType } from "../../redux/store";
 import { setCurrentPost } from "../../redux/posts-reducer";
+import styled from "styled-components";
+import themes from "../../themes";
+import { Container, PostHeader, PostBody } from "../styled";
+const { colors } = themes;
 
 type OwnProps = {
   postId: number;
@@ -19,6 +23,12 @@ type MapDispatchProps = {
 };
 
 type PostInfoProps = OwnProps & MapStateProps & MapDispatchProps;
+
+const PostCard = styled.div`
+  padding: 30px;
+  margin: 0 auto;
+  border: 1px solid ${colors.grey};
+`;
 
 const PostInfo: React.FC<PostInfoProps> = ({
   currentPost,
@@ -37,11 +47,19 @@ const PostInfo: React.FC<PostInfoProps> = ({
   if (!currentPost) return <h1>Loading...</h1>;
 
   return (
-    <>
-      <h1>Post: {currentPost.title}</h1>
-      <p>{currentPost.body}</p>
-      <PostComments />
-    </>
+    <Container paddingTop paddingBottom>
+      <PostCard>
+        <h1>Title</h1>
+        <PostHeader marginTop> {currentPost.title}</PostHeader>
+        <hr />
+        <br />
+        <h1>Body</h1>
+        <PostBody>{currentPost.body}</PostBody>
+        <hr />
+        <br />
+        <PostComments />
+      </PostCard>
+    </Container>
   );
 };
 

@@ -1,10 +1,17 @@
 import { PostType } from "../../interfaces";
 import PostItem from "./PostItem";
 import { Container } from "../styled";
+import styled from "styled-components";
 
 type PostsListProps = {
   preloadedPosts: PostType[];
 };
+
+const PostsHeader = styled.h1`
+  text-align: center;
+  font-size: 35px;
+  margin-bottom: 15px;
+`;
 
 const PostsList: React.FC<PostsListProps> = ({ preloadedPosts }) => {
   let postItems = preloadedPosts.map((post) => (
@@ -12,8 +19,8 @@ const PostsList: React.FC<PostsListProps> = ({ preloadedPosts }) => {
   ));
 
   return (
-    <Container>
-      <h1>Posts List!</h1>
+    <Container paddingTop paddingBottom>
+      <PostsHeader>All Posts:</PostsHeader>
       {postItems}
     </Container>
   );
