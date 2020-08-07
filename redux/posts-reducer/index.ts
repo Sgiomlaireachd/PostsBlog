@@ -27,10 +27,9 @@ export const postsReducer = (
     case SET_NEW_COMMENT:
       return {
         ...state,
-        // @ts-ignore: Unreachable code error
         currentPost: {
-          ...state.currentPost,
-          comments: state.currentPost?.comments?.concat(action.payload.comment),
+          ...state.currentPost!,
+          comments: state.currentPost!.comments!.concat(action.payload.comment),
         },
       };
     default:

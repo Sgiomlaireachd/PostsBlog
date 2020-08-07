@@ -8,5 +8,5 @@ export type PostType = {
   id: number;
   title: string;
   body: string;
-  comments: CommentType[] | undefined;
+  comments: CommentType[];
 };
