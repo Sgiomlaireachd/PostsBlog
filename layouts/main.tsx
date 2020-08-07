@@ -1,8 +1,12 @@
 import HeaderNav from "../components/HeaderNav/HeaderNav";
+import Head from "next/head";
 
 const NavbarLayout = (props: any) => (
   <>
-    <HeaderNav></HeaderNav>
+    <Head>
+      <title>MyBLOG</title>
+    </Head>
+    <HeaderNav />
     {props.children}
   </>
 );
