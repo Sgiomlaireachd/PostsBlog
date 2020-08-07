@@ -1,8 +1,8 @@
 # How to run
 
-Clone This repo to your computer
+1. Clone This repo to your computer
 
-Install it and run:
+2. Install it and run:
 
 ```bash
 npm install
@@ -11,3 +11,5 @@ npm run dev
 yarn
 yarn dev
 ```
+
+3. The Server should be running on localhost:3000
